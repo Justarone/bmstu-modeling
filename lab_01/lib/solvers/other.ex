@@ -1,7 +1,7 @@
-defmodule Picard.OtherSolvers do
+defmodule Picard.Solvers.Other do
   @alpha 1
   import Picard.Helper, only: [float_range_map: 5]
-  import Picard.PicardSolver, only: [f: 2]
+  import Picard.Solvers.Main, only: [f: 2]
 
   def generate_other_vals_with_names(from \\ 0, to, step) do
     [["Runge-Kutta method" | generate_runge_kutta_values(from, to, step, @alpha)],

@@ -2,8 +2,8 @@ defmodule Picard.Application do
   @precision_order 4
 
   use Application
-  import Picard.OtherSolvers
-  import Picard.PicardSolver
+  import Picard.Solvers.Main
+  import Picard.Solvers.Other
 
   def start(_, _) do
     run()

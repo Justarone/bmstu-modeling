@@ -1,4 +1,4 @@
-defmodule Picard.PicardSolver do
+defmodule Picard.Solvers.Main do
   alias Picard.Polynom
   @x_degree 2
   @x_coeff 1
