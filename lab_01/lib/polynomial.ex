@@ -20,16 +20,18 @@ defmodule Picard.Polynomial do
 
   defp _pow(result, polynomial, deg) do
     cond do
-      deg <= 1 -> result
-      true -> 
+      deg <= 1 ->
+        result
+
+      true ->
         _pow(mult(result, polynomial), polynomial, deg - 1)
     end
   end
 
   def mult(pol_1, pol_2) when is_map(pol_1) do
     pol_1
-    |> Enum.flat_map(fn ({d1, c1}) -> Enum.map(pol_2, fn ({d2, c2}) -> {d1 + d2, c1 * c2} end) end)
-    |> Enum.reduce(%{}, fn ({d, c}, acc) -> Map.update(acc, d, c, fn (ec) -> ec + c end) end)
+    |> Enum.flat_map(fn {d1, c1} -> Enum.map(pol_2, fn {d2, c2} -> {d1 + d2, c1 * c2} end) end)
+    |> Enum.reduce(%{}, fn {d, c}, acc -> Map.update(acc, d, c, fn ec -> ec + c end) end)
   end
 
   def mult(number, pol) when is_number(number) do
@@ -37,11 +39,10 @@ defmodule Picard.Polynomial do
   end
 
   def value(polynom, arg) do
-    Enum.reduce(polynom, 0.0, fn ({deg, coeff}, acc) -> coeff * :math.pow(arg, deg) + acc end)
+    Enum.reduce(polynom, 0.0, fn {deg, coeff}, acc -> coeff * :math.pow(arg, deg) + acc end)
   end
 
   def values_list(polynom, list) do
     Enum.map(list, &value(polynom, &1))
   end
 end
-

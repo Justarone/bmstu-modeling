@@ -10,13 +10,12 @@ defmodule Picard.Solvers.Main do
   def generate_picard_vals_with_names(precision_order, xlist) do
     generate_picard_values(precision_order, xlist)
     |> Enum.with_index(1)
-    |> Enum.map(fn ({vals, index}) -> ["Picard #{index} precision order" | vals] end)
-
+    |> Enum.map(fn {vals, index} -> ["Picard #{index} precision order" | vals] end)
   end
 
   def generate_picard_values(precision_order, xlist) do
-     picard_solvers_list(precision_order)
-     |> Enum.map(&Polynomial.values_list(&1, xlist))
+    picard_solvers_list(precision_order)
+    |> Enum.map(&Polynomial.values_list(&1, xlist))
   end
 
   def picard_solvers_list(precision_order) do
@@ -35,8 +34,8 @@ defmodule Picard.Solvers.Main do
   end
 
   defp new_picard_solver(polynom_y) do
-    Polynomial.sum(%{@x_degree => @x_coeff}, Polynomial.mult(@y_coeff, Polynomial.pow(polynom_y, @y_degree)))
-    |> Polynomial.integral
+    %{@x_degree => @x_coeff}
+    |> Polynomial.sum(Polynomial.mult(@y_coeff, Polynomial.pow(polynom_y, @y_degree)))
+    |> Polynomial.integral()
   end
 end
-
