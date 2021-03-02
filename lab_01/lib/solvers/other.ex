@@ -15,12 +15,12 @@ defmodule Picard.Solvers.Other do
       k2 = f(xn + step / 2 / alpha, yn + step / 2 / alpha * k1)
       yn + step * ((1 - alpha) * k1 + alpha * k2)
     end
-    float_range_map(from, to, step, [0], rk_func)
+    float_range_map(from, to + step, step, [0], rk_func)
     |> Enum.reverse
   end
 
   def generate_euler_values(from, to, step) do
-    float_range_map(from, to, step, [0], fn (xn, ys) -> hd(ys) + f(xn, hd(ys)) end)
+    float_range_map(from, to + step, step, [0], fn (xn, ys) -> hd(ys) + step * f(xn, hd(ys)) end)
     |> Enum.reverse
   end
 end

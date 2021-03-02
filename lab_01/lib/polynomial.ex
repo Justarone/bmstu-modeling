@@ -1,4 +1,4 @@
-defmodule Picard.Polynom do
+defmodule Picard.Polynomial do
   @const_value 0
 
   def integral(polynom, const_value \\ @const_value) do
@@ -15,7 +15,25 @@ defmodule Picard.Polynom do
   def sum(pol1, pol2), do: Map.merge(pol1, pol2, fn _k, v1, v2 -> v1 + v2 end)
 
   def pow(polynom, deg) do
-    for {degree, coeff} <- polynom, do: {degree * deg, :math.pow(coeff, deg)}, into: %{}
+    _pow(polynom, polynom, deg)
+  end
+
+  defp _pow(result, polynomial, deg) do
+    cond do
+      deg <= 1 -> result
+      true -> 
+        _pow(mult(result, polynomial), polynomial, deg - 1)
+    end
+  end
+
+  def mult(pol_1, pol_2) when is_map(pol_1) do
+    pol_1
+    |> Enum.flat_map(fn ({d1, c1}) -> Enum.map(pol_2, fn ({d2, c2}) -> {d1 + d2, c1 * c2} end) end)
+    |> Enum.reduce(%{}, fn ({d, c}, acc) -> Map.update(acc, d, c, fn (ec) -> ec + c end) end)
+  end
+
+  def mult(number, pol) when is_number(number) do
+    Enum.reduce(pol, %{}, fn {deg, coeff}, acc -> Map.put(acc, deg, coeff * number) end)
   end
 
   def value(polynom, arg) do

@@ -1,8 +1,9 @@
 defmodule Picard.Solvers.Main do
-  alias Picard.Polynom
+  alias Picard.Polynomial
   @x_degree 2
   @x_coeff 1
   @y_degree 2
+  @y_coeff 1
 
   def f(x, y), do: :math.pow(@x_coeff * x, @x_degree) + :math.pow(y, @y_degree)
 
@@ -15,7 +16,7 @@ defmodule Picard.Solvers.Main do
 
   def generate_picard_values(precision_order, xlist) do
      picard_solvers_list(precision_order)
-     |> Enum.map(&Polynom.values_list(&1, xlist))
+     |> Enum.map(&Polynomial.values_list(&1, xlist))
   end
 
   def picard_solvers_list(precision_order) do
@@ -34,8 +35,8 @@ defmodule Picard.Solvers.Main do
   end
 
   defp new_picard_solver(polynom_y) do
-    Polynom.sum(%{@x_degree => @x_coeff}, Polynom.pow(polynom_y, @y_degree))
-    |> Polynom.integral()
+    Polynomial.sum(%{@x_degree => @x_coeff}, Polynomial.mult(@y_coeff, Polynomial.pow(polynom_y, @y_degree)))
+    |> Polynomial.integral
   end
 end
 
