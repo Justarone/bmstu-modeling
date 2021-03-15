@@ -6,7 +6,7 @@ defmodule RungeKutta.InterpolatedFuncs do
   @lp 12
   @tw 2000
 
-  @m_I [
+  @t0_I [
     {0.5, 6730},
     {1, 6790},
     {5, 7150},
@@ -17,7 +17,7 @@ defmodule RungeKutta.InterpolatedFuncs do
     {800, 11140},
     {1200, 12010}
   ]
-  @t0_I [
+  @m_I [
     {0.5, 0.5},
     {1, 0.55},
     {5, 1.7},
@@ -54,14 +54,17 @@ defmodule RungeKutta.InterpolatedFuncs do
     t0_val = t0(i)
     m_val = m(i)
     t = t0_val + (@tw - t0_val) * :math.pow(z, m_val)
-    linear_interpolation(@sigma_T, t)
+    linear_interpolation(@sigma_T, t, fn x -> :math.log(x) end) |> :math.exp()
   end
 
   def rp(i) do
-    @lp / (2 * :math.pi() * @r * @r * trapezoid(0, 1, @step, fn z -> sigma(i, z) * z end))
+    integral = trapezoid(0, 1, @step, fn z -> sigma(i, z) * z end)
+    @lp / (2 * :math.pi() * @r * @r * integral)
   end
 
-  def linear_interpolation(table, arg) do
+  def linear_interpolation(table, arg, func \\ & &1) do
+    arg = func.(arg)
+    table = Enum.map(table, fn {xn, yn} -> {func.(xn), func.(yn)} end)
     {{x1, y1}, {x2, y2}} = find_closest_pair(table, arg)
     y1 + (y2 - y1) / (x2 - x1) * (arg - x1)
   end

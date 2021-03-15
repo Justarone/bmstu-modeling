@@ -5,7 +5,8 @@ defmodule RungeKutta.MainFuncs do
   import RungeKutta.InterpolatedFuncs, only: [rp: 1]
 
   def f(_x, u, v) do
-    (v - (@rk + rp(u)) * u) / @lk
+    rpp = rp(u)
+    (v - (@rk + rpp) * u) / @lk
   end
 
   def f_const(_x, u, v, c) do

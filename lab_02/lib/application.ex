@@ -1,8 +1,5 @@
 defmodule RungeKutta.Application do
   use Application
-  import RungeKutta.Solver
-  import RungeKutta.Helper, only: [float_range_generator: 3]
-  alias RungeKutta.Plot
   import RungeKutta.Runners
 
   def start(_, _) do

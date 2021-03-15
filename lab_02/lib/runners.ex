@@ -1,8 +1,10 @@
 defmodule RungeKutta.Runners do
   import RungeKutta.Helper
   import RungeKutta.Solver
+  alias RungeKutta.Plot
+  import RungeKutta.MainFuncs, only: [f_const: 4]
 
-  defp run_simple_graphs(from, to, step) do
+  def run_simple_graphs(from, to, step) do
     xs = float_range_generator(from, to, step)
     {ys, zs} = Enum.unzip(generate_iu(from, to, step, &RungeKutta.MainFuncs.f/3))
     rpns = generate_rp(from, to, step)
@@ -16,12 +18,9 @@ defmodule RungeKutta.Runners do
     Plot.show_all(plots)
   end
 
-  defp run_const_resistance(from, to, step, c) do
+  def run_const_resistance(from, to, step, c \\ 0) do
     xs = float_range_generator(from, to, step)
-
-    {ys, zs} =
-      Enum.unzip(generate_iu(from, to, step, &RungeKutta.MainFuncs.f_const(&1, &2, &3, c)))
-
+    {ys, zs} = Enum.unzip(generate_iu(from, to, step, fn x, y, z -> f_const(x, y, z, c) end))
     plots = Plot.init_plot_collection()
     plots = Plot.plot(plots, xs, ys, "I (R = #{c})")
     plots = Plot.plot(plots, xs, zs, "U (R = #{c})")

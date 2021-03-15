@@ -7,7 +7,7 @@ defmodule RungeKutta.Plot do
     #many graphics on one plot version
     #ind = Enum.count(params) + 1
     #params = [["-", :title, title, :with, :lines, :ls, ind] | params]
-    params = [[[:set, :title, title], [:plot, "-", :with, :lines]] | params]
+    params = [[[:set, :title, title], [:plot, "-", :with, :lines], ~w(set grid)a] | params]
     plots = [Stream.zip(xs, ys) |> Enum.map(&Tuple.to_list/1) | plots]
     {params, plots}
   end
