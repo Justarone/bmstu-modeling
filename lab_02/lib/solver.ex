@@ -6,8 +6,9 @@ defmodule RungeKutta.Solver do
   import RungeKutta.MainFuncs, only: [phi: 3]
 
   def generate_t0(from, to, step) do
-    float_range_map(from, to, step, [], fn cur, _lst -> t0(cur) end)
-    |> Enum.reverse()
+    generate_iu(from, to, step, &RungeKutta.MainFuncs.f/3)
+    |> Stream.map(fn {yn, _zn} -> yn end)
+    |> Enum.map(fn i -> t0(i) end)
   end
 
   def generate_iu(from, to, step, f) do
@@ -29,7 +30,6 @@ defmodule RungeKutta.Solver do
   def generate_rp(from, to, step) do
     generate_iu(from, to, step, &RungeKutta.MainFuncs.f/3)
     |> Stream.map(fn {yn, _zn} -> yn end)
-    |> Enum.reverse()
     |> Enum.map(fn i -> rp(i) end)
   end
 end

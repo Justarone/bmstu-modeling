@@ -13,6 +13,8 @@ defmodule RungeKutta.Runners do
     plots = Plot.plot(plots, xs, ys, "I")
     plots = Plot.plot(plots, xs, zs, "U")
     plots = Plot.plot(plots, xs, rpns, "Rp")
+    rp_mul_i = rpns |> Stream.zip(ys) |> Enum.map(fn {rp, i} -> rp * i end)
+    plots = Plot.plot(plots, xs, rp_mul_i, "Rp * I")
     # yn * zn
     plots = Plot.plot(plots, xs, t0s, "T0")
     Plot.show_all(plots)

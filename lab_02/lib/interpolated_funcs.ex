@@ -54,7 +54,7 @@ defmodule RungeKutta.InterpolatedFuncs do
     t0_val = t0(i)
     m_val = m(i)
     t = t0_val + (@tw - t0_val) * :math.pow(z, m_val)
-    linear_interpolation(@sigma_T, t, fn x -> :math.log(x) end) |> :math.exp()
+    linear_interpolation(@sigma_T, t)
   end
 
   def rp(i) do
