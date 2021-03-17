@@ -19,8 +19,8 @@ defmodule RungeKutta.Solver do
       p2 = step * phi(xn + step / 2, yn + k1 / 2, zn + p1 / 2)
       k3 = step * f.(xn + step / 2, yn + k2 / 2, zn + p2 / 2)
       p3 = step * phi(xn + step / 2, yn + k2 / 2, zn + p2 / 2)
-      k4 = step * f.(xn + step, yn + k3, zn + k3)
-      p4 = step * phi(xn + step, yn + k3, zn + k3)
+      k4 = step * f.(xn + step, yn + k3, zn + p3)
+      p4 = step * phi(xn + step, yn + k3, zn + p3)
 
       {yn + (k1 + 2 * k2 + 2 * k3 + k4) / 6, zn + (p1 + 2 * p2 + 2 * p3 + p4) / 6}
     end)

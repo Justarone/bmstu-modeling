@@ -36,7 +36,7 @@ defmodule RungeKutta.InterpolatedFuncs do
     {8000, 12.0},
     {9000, 19.9},
     {10000, 29.6},
-    {11000, 29.6},
+    {11000, 41.1},
     {12000, 54.1},
     {13000, 67.7},
     {14000, 81.5}
@@ -50,21 +50,19 @@ defmodule RungeKutta.InterpolatedFuncs do
     linear_interpolation(@t0_I, i)
   end
 
-  def sigma(i, z) do
-    t0_val = t0(i)
-    m_val = m(i)
+  def sigma(z, t0_val, m_val) do
     t = t0_val + (@tw - t0_val) * :math.pow(z, m_val)
     linear_interpolation(@sigma_T, t)
   end
 
   def rp(i) do
-    integral = trapezoid(0, 1, @step, fn z -> sigma(i, z) * z end)
+    t0_val = t0(i)
+    m_val = m(i)
+    integral = trapezoid(0, 1, @step, fn z -> sigma(z, t0_val, m_val) * z end)
     @lp / (2 * :math.pi() * @r * @r * integral)
   end
 
-  def linear_interpolation(table, arg, func \\ & &1) do
-    arg = func.(arg)
-    table = Enum.map(table, fn {xn, yn} -> {func.(xn), func.(yn)} end)
+  def linear_interpolation(table, arg) do
     {{x1, y1}, {x2, y2}} = find_closest_pair(table, arg)
     y1 + (y2 - y1) / (x2 - x1) * (arg - x1)
   end
@@ -72,9 +70,13 @@ defmodule RungeKutta.InterpolatedFuncs do
   def find_closest_pair(table, arg) do
     table
     |> Stream.zip(Stream.drop(table, 1))
-    |> Enum.reduce_while(nil, fn {{x1, _}, _} = pair, _acc ->
+    |> Enum.reduce_while(nil, fn {{x1, _}, _} = pair, acc ->
       cond do
-        x1 >= arg -> {:halt, pair}
+        x1 >= arg ->
+          case acc do
+            nil -> {:halt, pair}
+            _ -> {:halt, acc}
+          end
         true -> {:cont, pair}
       end
     end)
