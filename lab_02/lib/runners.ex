@@ -9,14 +9,14 @@ defmodule RungeKutta.Runners do
     {ys, zs} = Enum.unzip(generate_iu(from, to, step, &RungeKutta.MainFuncs.f/3))
     rpns = generate_rp(from, to, step)
     t0s = generate_t0(from, to, step)
-    xs
-    |> Enum.zip(rpns)
-    |> Enum.zip(t0s)
-    |> Enum.zip(ys)
-    |> Enum.zip(zs)
-    |> Enum.map(fn {{{{x, rp}, t0}, y}, z} ->
-      IO.puts "x = #{x}, Rp = #{rp}, T0 = #{t0}, I = #{y}, U = #{z};"
-    end)
+    #xs
+    #|> Enum.zip(rpns)
+    #|> Enum.zip(t0s)
+    #|> Enum.zip(ys)
+    #|> Enum.zip(zs)
+    #|> Enum.map(fn {{{{x, rp}, t0}, y}, z} ->
+      #IO.puts "x = #{x}, Rp = #{rp}, T0 = #{t0}, I = #{y}, U = #{z};"
+    #end)
     plots = Plot.init_plot_collection()
     plots = Plot.plot(plots, xs, ys, "I")
     plots = Plot.plot(plots, xs, zs, "U")
