@@ -22,8 +22,8 @@ class Params:
 params = Params()
 
 interpolate = lambda x_pts, y_pts, order=1: InterpolatedUnivariateSpline(x_pts, y_pts, k=order)
-p = lambda k_t, t, n: 4 * params.Np * params.Np * params.sigma * k_t(t[n]) * pow(t[n], 3)
-f = lambda k_t, t, n: 4 * params.Np * params.Np + params.sigma * k_t(t[n]) * pow(params.T0, 4)
+p = lambda k_t, t, n: 0
+f = lambda k_t, t, n: 4 * params.Np * params.Np + params.sigma * k_t(t[n]) * (pow(t, 4) - pow(params.T0, 4))
 
 x_right = lambda l_t, t, n: (l_t(t[n]) + l_t(t[n + 1])) / 2
 x_left = lambda l_t, t, n: (l_t(t[n]) + l_t(t[n - 1])) / 2
